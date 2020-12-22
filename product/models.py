@@ -7,11 +7,15 @@ class Brand(models.Model):
     name = models.CharField(_("name"), max_length=60, unique=True )
     details = models.TextField(_("details"), max_length=120, )
     image = models.ImageField(_("logo"), upload_to='brand/logo', blank=True, )
+    create_at = models.DateTimeField(_("Create at"), auto_now_add=True)
+    update_at = models.DateTimeField(_("Update at"), auto_now=True)
 
 class Category(models.Model):
     name = models.CharField(_("name"), max_length=60, unique=True )
     details = models.TextField(_("details"), max_length=120, )
     image = models.ImageField(_("image"), upload_to='category/img', blank=True, )
+    create_at = models.DateTimeField(_("Create at"), auto_now_add=True)
+    update_at = models.DateTimeField(_("Update at"), auto_now=True)
 
 
 class Product(models.Model):
@@ -23,6 +27,8 @@ class Product(models.Model):
     details = models.TextField(_("details"), max_length=120, )
     image = models.ImageField(_("logo"), upload_to='brand/logo', blank=True, )
     shop_product = models.ManyToManyField(Shop, through= 'ShopProduct')
+    create_at = models.DateTimeField(_("Create at"), auto_now_add=True)
+    update_at = models.DateTimeField(_("Update at"), auto_now=True)
 
 
 class Image(models.Model):
@@ -40,5 +46,7 @@ class ShopProduct(models.Model):
     product= models.ForeignKey(Product, verbose_name=_("Product"),on_delete=models.CASCADE)
     price = models.DecimalField(max_digits=5, decimal_places=2)
     quantity = models.CharField(_("quantity") , max_length=120)
-    
+    create_at = models.DateTimeField(_("Create at"), auto_now_add=True)
+    update_at = models.DateTimeField(_("Update at"), auto_now=True)
+   
 

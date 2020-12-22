@@ -41,6 +41,9 @@ class User(AbstractBaseUser, PermissionsMixin):
     first_name = models.CharField(_("first name") , max_length=60 , null=True)
     last_name = models.CharField(_("last name") , max_length=60, null=True)
     image = models.ImageField(_("avatar"), upload_to='user/avatars', blank=True, )
+    create_at = models.DateTimeField(_("Create at"), auto_now_add=True)
+    update_at = models.DateTimeField(_("Update at"), auto_now=True)
+
     is_staff = models.BooleanField(
         _('staff status'),
         default=False,
@@ -93,3 +96,6 @@ class Shop(models.Model):
     name = models.CharField(_("name") , max_length=120)
     discription = models.TextField(_("discription"), max_length=400)
     image = models.ImageField(_("avatar"), upload_to='shop/logo', blank=True, )
+    create_at = models.DateTimeField(_("Create at"), auto_now_add=True)
+    update_at = models.DateTimeField(_("Update at"), auto_now=True)
+
