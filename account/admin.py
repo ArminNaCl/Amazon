@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import User, Shop , Address
+from .models import User, Shop , Address 
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.utils.translation import ugettext_lazy as  _ 
 
@@ -10,11 +10,12 @@ from django.contrib.auth.forms import AdminPasswordChangeForm
 class UserAdmin(BaseUserAdmin):
     list_display = ['email' , 'mobile', 'last_name']
     change_password_form = AdminPasswordChangeForm
-    ordering =('last_name',)
+    ordering =('last_name','email')
+
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('email', 'full_name', 'password1', 'password2')
+            'fields': ('email', 'password1','password2','mobile')
         }),
     )
     fieldsets = (
@@ -25,7 +26,7 @@ class UserAdmin(BaseUserAdmin):
             ),
         }),
         (_('Personal info'), {
-            "fields": ('full_name', 'avatar')
+            "fields": ('mobile','first_name','last_name', 'image')
         }),
         (_('Permissions'), {
             "fields": ('is_staff', 'is_active', 'is_superuser',)

@@ -40,7 +40,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     mobile = models.CharField(_("mobile"), unique=True,validators=[phone_regex], max_length=13)
     first_name = models.CharField(_("first name") , max_length=60 , null=True)
     last_name = models.CharField(_("last name") , max_length=60, null=True)
-    image = models.ImageField(_("avatar"), upload_to='user/avatars', blank=True, )
+    image = models.ImageField(_("avatar"), upload_to='user/avatars', blank=True, null=True )
     create_at = models.DateTimeField(_("Create at"), auto_now_add=True)
     update_at = models.DateTimeField(_("Update at"), auto_now=True)
 
@@ -59,7 +59,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     )
     EMAIL_FIELD = 'email'
     USERNAME_FIELD = 'email'
-    # REQUIRED_FIELDS = ['full_name']
+    REQUIRED_FIELDS = ['mobile']
     objects = UserManager()
 
     def clean(self):
@@ -69,7 +69,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         """
         Return the user full_name.
         """
-        return self.full_name
+        return self.fist_name +self.last_name
 
     def email_user(self, subject, message, from_email=None, **kwargs):
         """Send an email to this user."""
@@ -88,6 +88,9 @@ class Address(models.Model):
     street = models.CharField(_("street"), max_length=60, )
     allay = models.CharField(_("allay"), max_length=60,  )
     zip_code = models.IntegerField(_("zip code"), null=False , blank=False )
+    class Meta:
+        verbose_name = _('Address')
+        verbose_name_plural = _('Addresses')
     
 
 class Shop(models.Model):
@@ -98,4 +101,10 @@ class Shop(models.Model):
     image = models.ImageField(_("avatar"), upload_to='shop/logo', blank=True, )
     create_at = models.DateTimeField(_("Create at"), auto_now_add=True)
     update_at = models.DateTimeField(_("Update at"), auto_now=True)
+    class Meta:
+        verbose_name = _('Shop')
+        verbose_name_plural = _('Shops')
+    def __str__(self):
+        return self.name
+
 
