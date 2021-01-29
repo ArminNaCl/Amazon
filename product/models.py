@@ -71,17 +71,19 @@ class ProductMeta(models.Model):
         verbose_name = _('ProductMeta')
         verbose_name_plural = _('ProductsMetas')
 
+
 class ShopProduct(models.Model):
     shop= models.ForeignKey(Shop, verbose_name=_("shop"),on_delete=models.CASCADE)
-    product= models.ForeignKey(Product, verbose_name=_("Product"),on_delete=models.CASCADE)
-    price = models.DecimalField(max_digits=5, decimal_places=2)
+    product= models.ForeignKey(Product, verbose_name=_("Product"),related_name='product', on_delete=models.CASCADE)
+    price = models.DecimalField(max_digits=7, decimal_places=2)
     quantity = models.CharField(_("quantity") , max_length=120)
     create_at = models.DateTimeField(_("Create at"), auto_now_add=True)
     update_at = models.DateTimeField(_("Update at"), auto_now=True)
     class Meta:
         verbose_name = _('Shop Product')
         verbose_name_plural = _('Shop Products')
-   
+    def __str__(self):
+        return self.shop.name+' '+self.product.name
 
 class Like(models.Model):
     user = models.ForeignKey(User, verbose_name=_("user"),related_name='like_product'
