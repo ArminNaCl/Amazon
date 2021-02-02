@@ -48,7 +48,11 @@
                     </div>
                     <div class="our-link">
                         <ul>
-                            <li><a href="#">My Account</a></li>
+                            {% if request.user.is_authenticated %}
+                                    <li><a href="#">{{request.user.first_name}}</a></li>
+                                {% else %} 
+                                    <li><a href="#">My Account</a></li>
+                                {% endif %}
                             <li><a href="#">Our location</a></li>
                             <li><a href="#">Contact Us</a></li>
                         </ul>
