@@ -86,7 +86,7 @@
                     <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
                         <div class="shop-cat-box">
                             <img class="img-fluid" src="{{category.image.url}}" alt="" />
-                            <a class="btn hvr-hover" href="{% url "category-url" category.id %}">{{category.name}}</a>
+                            <a class="btn hvr-hover" href="{% url "categoryview-url" category.id %}">{{category.name}}</a>
                         </div>
                     </div>
                 {% endfor %}
@@ -127,7 +127,8 @@
                                 <div class="type-lb">
                                     <p class="sale">NEW</p>
                                 </div>
-                                <img src="{{new.product.image.url}}" class="img-fluid" alt="Image">
+                                
+                                <img src="{{new.product.album.default.image.url}}" class="img-fluid" alt="Image">
                                 <div class="mask-icon">
                                     <ul>
                                         <li><a href="{% url 'productview-url' new.product.id %}" data-toggle="tooltip" data-placement="right" title="View"><i class="fas fa-eye"></i></a></li>

@@ -3,6 +3,24 @@ from django.utils.translation import ugettext_lazy as _
 from account.models import Shop ,User
 # Create your models here.
 
+
+def get_upload_path(instance, filename):
+    model = instance.album.model.__class__._meta
+    name = model.verbose_name_plural.replace(' ', '_')
+    return f'{name}/images/{filename}'
+
+class ImageAlbum(models.Model):
+    name = models.CharField(_("name"), max_length=60, default="yes" )
+
+    @property
+    def default(self):
+        return self.images.filter(default=True).first()
+    class Meta:
+        verbose_name = _('ImageAlbum')
+    def __str__(self):
+        return self.name
+
+
 class Brand(models.Model):
     name = models.CharField(_("name"), max_length=60, unique=True )
     details = models.TextField(_("details"), max_length=120, )
@@ -20,6 +38,8 @@ class Category(models.Model):
     name = models.CharField(_("name"), max_length=60, unique=True )
     details = models.TextField(_("details"), max_length=120, )
     image = models.ImageField(_("image"), upload_to='media/category/img', blank=True, )
+    parent = models.ForeignKey('self',related_name="children",related_query_name="children",
+                        verbose_name=_("parent") ,on_delete=models.SET_NULL, null=True,blank=True)
     create_at = models.DateTimeField(_("Create at"), auto_now_add=True)
     update_at = models.DateTimeField(_("Update at"), auto_now=True)
     class Meta:
@@ -31,11 +51,11 @@ class Category(models.Model):
 class Product(models.Model):
     brand= models.OneToOneField(Brand, related_name="products", verbose_name=_("brand"),
                                 on_delete=models.CASCADE)
-    category= models.ForeignKey(Category, related_name="products", verbose_name=_("Category"),
+    category= models.ForeignKey('Category', related_name="products", verbose_name=_("Category"),
                                 on_delete=models.CASCADE)
     name = models.CharField(_("name"), max_length=60, unique=True )
-    details = models.TextField(_("details"), max_length=120, )
-    image = models.ImageField(_("logo"), upload_to='media/brand/logo', blank=True, )
+    details = models.TextField(_("details"), max_length=240, )
+    album = models.OneToOneField(ImageAlbum, related_name='model', on_delete=models.CASCADE)
     shop_product = models.ManyToManyField(Shop, through= 'ShopProduct')
     create_at = models.DateTimeField(_("Create at"), auto_now_add=True)
     update_at = models.DateTimeField(_("Update at"), auto_now=True)
@@ -56,12 +76,15 @@ class Product(models.Model):
         return querset.count()    
 
 
-
-
 class Image(models.Model):
-    product = models.ForeignKey(Product,related_name="Image", verbose_name=_("Product"),
-                                related_query_name='image-product',on_delete=models.CASCADE)
-    image = models.ImageField(_("image"), upload_to='product/img', blank=True, )
+    image = models.ImageField(upload_to=get_upload_path)
+    default = models.BooleanField(default=False)
+    album = models.ForeignKey(ImageAlbum, related_name='images',related_query_name="images", on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.album.__str__()
+
+
     
 class ProductMeta(models.Model):
     product =models.ForeignKey(Product,on_delete=models.CASCADE)

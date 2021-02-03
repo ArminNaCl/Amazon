@@ -1,11 +1,10 @@
 from django.urls import path
 from .views import (
     index,
-    ProductView
 )
 
 urlpatterns = [
     path('',index.as_view(),name='homeview-url'),
-    path('<int:pk>/',ProductView.as_view(),name='productview-url'),
+    
 
-]
+]  #hey i know you you will forget what are you doing later so just copy prouductview to his folder good

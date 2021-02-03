@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.views.generic import TemplateView,DeleteView
+from django.views.generic import TemplateView
 from .models import SlideShow
 from product.models import Category,Product,ShopProduct
 
@@ -21,10 +21,3 @@ class index(TemplateView):
         # context['newest2']= map(context['newest'], key=lambda product_: ShopProduct.objects.filter(product=product_).order_by('price')[:1])
         return context
 
-class ProductView(DeleteView):
-    template_name= 'siteview/shop-detail.html'
-    model = Product
-    context_object_name='product'
-    # def get_context_data(self):
-    #     context=super().get_context_data()
-    #     return context
