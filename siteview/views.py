@@ -24,7 +24,7 @@ class index(TemplateView):
 class ProductView(DeleteView):
     template_name= 'siteview/shop-detail.html'
     model = Product
-    context_object_name='object'
+    context_object_name='product'
     # def get_context_data(self):
     #     context=super().get_context_data()
     #     return context
