@@ -24,6 +24,7 @@ class RegisteritionView(CreateView):
 class LoginView(Login):
     template_name = 'siteview/login.html'
     form_class = UserLoginForm
+    success_url='/'
 
 class LogoutView(Logout):
     next_page = '/'
