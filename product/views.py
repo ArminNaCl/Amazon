@@ -42,6 +42,11 @@ def add_to_cart(request,id):
 
     return  redirect("productview-url",product.id)
 
+def remove_from_cart(request,id):
+    basket_item = get_object_or_404(BasketItem,id=id)
+    basket_item.delete()
+    return redirect('cartview-url') 
+
 
 
 
