@@ -49,14 +49,14 @@ class Category(models.Model):
         return self.name
 
 class Product(models.Model):
-    brand= models.OneToOneField(Brand, related_name="products", verbose_name=_("brand"),
+    brand= models.ForeignKey(Brand, related_name="products", verbose_name=_("brand"),
                                 on_delete=models.CASCADE)
     category= models.ForeignKey('Category', related_name="products", verbose_name=_("Category"),
                                 on_delete=models.CASCADE)
     name = models.CharField(_("name"), max_length=60, unique=True )
     details = models.TextField(_("details"), max_length=240, )
     album = models.OneToOneField(ImageAlbum, related_name='model', on_delete=models.CASCADE)
-    shop_product = models.ManyToManyField(Shop, through= 'ShopProduct')
+    shop_product = models.ManyToManyField(Shop, through= 'ShopProduct' ,related_name='products')
     create_at = models.DateTimeField(_("Create at"), auto_now_add=True)
     update_at = models.DateTimeField(_("Update at"), auto_now=True)
 
@@ -73,7 +73,10 @@ class Product(models.Model):
     @property
     def disslike_count(self):
         querset = Like.objects.filter(prouduct = self,condition=False)
-        return querset.count()    
+        return querset.count()   
+    def best_price(self) :
+        queryset= self.product.order_by('price').first()
+        return queryset
 
 
 class Image(models.Model):

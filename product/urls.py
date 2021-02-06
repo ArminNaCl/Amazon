@@ -5,11 +5,13 @@ from .views import (
     BrandView,
     add_to_cart,
     remove_from_cart,
-    CartView
+    CartView,
+    ShopView
 )
 
 
 urlpatterns = [
+    path('product/',ShopView.as_view(),name='shopview-url'),
     path('product/<int:pk>/',ProductView.as_view(),name='productview-url'),
     path('category/<int:id>/',category,name='categoryview-url'),
     path('brand/<int:id>/',BrandView.as_view(),name='brandview-url'),

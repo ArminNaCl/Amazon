@@ -13,11 +13,5 @@ class index(TemplateView):
         context['slideshow'] = SlideShow.objects.all()
         context['categories'] = Category.objects.all()
         context['newest'] = Product.objects.order_by('create_at')[:5]
-        # context['newest2']= ShopProduct.objects.filter(product__in= context['newest'])
-
-        context['newest2'] = [ShopProduct.objects.filter(product=product_).order_by('price').first() for product_ in context['newest']]
-
-        
-        # context['newest2']= map(context['newest'], key=lambda product_: ShopProduct.objects.filter(product=product_).order_by('price')[:1])
         return context
 

@@ -4,6 +4,7 @@ from .models import (
     Category, 
     Product,
     ShopProduct,
+    Brand,
 
 )
 
@@ -12,6 +13,18 @@ from order.models import (
     BasketItem
 )
 # Create your views here.
+
+class CategoryView(ListView):
+    queryset = Product.objects.filter(category='')
+    context_object_name = 'product'
+    paginate_by=9
+    template_name = 'siteview/shop.html'
+    def get_context_data(self):
+        context = super().get_context_data()
+        context['category'] = Category.objects.filter(parent=None)
+        context['brand'] = Brand.objects.all()
+        return context
+
 
 def category(request,id):
     return render(request, 'product/category.html',{'category':id})
@@ -62,3 +75,15 @@ class CartView(ListView):
 
 
     template_name= "siteview/cart.html"
+
+class ShopView(ListView):
+    queryset = Product.objects.all()
+    context_object_name = 'product'
+    paginate_by=9
+    template_name = 'siteview/shop.html'
+    def get_context_data(self):
+        context = super().get_context_data()
+        context['category'] = Category.objects.filter(parent=None)
+        context['brand'] = Brand.objects.all()
+        return context
+
