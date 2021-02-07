@@ -1,5 +1,5 @@
 from django.shortcuts import render,get_object_or_404,redirect
-from django.views.generic import DeleteView,ListView
+from django.views.generic import DetailView,ListView
 from .models import (
     Category, 
     Product,
@@ -15,7 +15,9 @@ from order.models import (
 # Create your views here.
 
 class CategoryView(ListView):
-    queryset = Product.objects.filter(category='')
+    def get_queryset(self):
+        queryset = Product.objects.filter(category=self.kwargs.get('id'))
+        return queryset
     context_object_name = 'product'
     paginate_by=9
     template_name = 'siteview/shop.html'
@@ -23,6 +25,7 @@ class CategoryView(ListView):
         context = super().get_context_data()
         context['category'] = Category.objects.filter(parent=None)
         context['brand'] = Brand.objects.all()
+        context['select'] = Category.objects.get(id =self.kwargs.get('id'))
         return context
 
 
@@ -30,7 +33,7 @@ def category(request,id):
     return render(request, 'product/category.html',{'category':id})
 
 
-class ProductView(DeleteView):
+class ProductView(DetailView):
     template_name= 'siteview/shop-detail.html'
     model = Product
     context_object_name='product'
@@ -39,7 +42,7 @@ class ProductView(DeleteView):
     #     context['image'] = 
     #     return context
 
-class BrandView(DeleteView):
+class BrandView(DetailView):
     pass
 
 def add_to_cart(request,id):
@@ -77,7 +80,6 @@ class CartView(ListView):
     template_name= "siteview/cart.html"
 
 class ShopView(ListView):
-    queryset = Product.objects.all()
     context_object_name = 'product'
     paginate_by=9
     template_name = 'siteview/shop.html'
@@ -86,4 +88,22 @@ class ShopView(ListView):
         context['category'] = Category.objects.filter(parent=None)
         context['brand'] = Brand.objects.all()
         return context
+    def get(self,request):
+        _to =request.GET.get('price_to')
+        _from = request.GET.get('price_from')
+        q = request.GET.get('q','')
+        result=list()
+        result += Product.objects.filter(name__icontains = q)
+        result += Product.objects.filter(category__name__icontains = q)
+        result += Product.objects.filter(brand__name__icontains = q)
+        self.results = list(set(result))
+        self.results.objects.filter
+        return super().get(request)
+    def get_queryset(self):
+        if self.results:
+            return self.results
+        else:
+            return Product.objects.all()
+        
+
 

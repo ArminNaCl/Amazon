@@ -1,5 +1,6 @@
 from django.shortcuts import render,redirect
-from django.views.generic.edit import CreateView
+from django.views.generic.edit import CreateView 
+from django.views.generic import DetailView
 from django.contrib.auth.views import LoginView as Login , LogoutView as Logout ,get_user_model
 from .forms import UserRegistrationForm ,UserLoginForm
 from django.contrib.auth import authenticate, login
@@ -28,3 +29,6 @@ class LoginView(Login):
 
 class LogoutView(Logout):
     next_page = '/'
+
+class ProfileView(DetailView):
+    pass
