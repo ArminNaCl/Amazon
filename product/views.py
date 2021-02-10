@@ -1,5 +1,12 @@
 from django.shortcuts import render,get_object_or_404,redirect
-from django.views.generic import DetailView,ListView
+from django.views.generic import DetailView,ListView ,UpdateView
+from django.db.models import Q
+from django.contrib.auth.views import get_user_model
+from account.forms import UserUpdateForm
+from django.contrib.auth.decorators import login_required
+
+User = get_user_model()
+
 from .models import (
     Category, 
     Product,
@@ -87,23 +94,40 @@ class ShopView(ListView):
         context = super().get_context_data()
         context['category'] = Category.objects.filter(parent=None)
         context['brand'] = Brand.objects.all()
+        context['thisurl']= self.request.GET.get('q','')
         return context
-    def get(self,request):
+
+    def get(self,request,*args,**kwargs):
         _to =request.GET.get('price_to')
         _from = request.GET.get('price_from')
-        q = request.GET.get('q','')
-        result=list()
-        result += Product.objects.filter(name__icontains = q)
-        result += Product.objects.filter(category__name__icontains = q)
-        result += Product.objects.filter(brand__name__icontains = q)
-        self.results = list(set(result))
-        self.results.objects.filter
-        return super().get(request)
-    def get_queryset(self):
-        if self.results:
-            return self.results
-        else:
-            return Product.objects.all()
+        _brand = request.GET.get('brand')
+        q = request.GET.get('q')
+        self.results = Product.objects.all()
+        if q:
+            self.results = Product.objects.filter(Q(name__icontains =q)| Q(category__name__icontains=q)| Q(brand__name__icontains = q))
         
+        if _brand:
+            self.results = self.results.filter(brand__id = _brand)
+        
+        # self.results = self.results.filter(best_price__price__gt =_from)
+        self.results = list(set(self.results))
+        return super().get(request)
+
+    def get_queryset(self):
+        return self.results
+              
+def myAccountView(request):
+    return render(request, 'siteview/my-account.html',{'user':request.user})
+
+@login_required
+def updateProfile(request):
+    if request.method == 'POST':
+        form = UserUpdateForm(data=request.POST,instance=request.user)
+        if form.is_valid():
+            form.save()
+            return redirect('shopview-url')
+    else:
+        form=UserUpdateForm(instance=request.user)
+    return render(request,'siteview/update_form.html',{'form':form})
 
 

@@ -73,7 +73,8 @@ class Product(models.Model):
     @property
     def disslike_count(self):
         querset = Like.objects.filter(prouduct = self,condition=False)
-        return querset.count()   
+        return querset.count()  
+    @property 
     def best_price(self) :
         queryset= self.product.order_by('price').first()
         return queryset

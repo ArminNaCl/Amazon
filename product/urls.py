@@ -6,17 +6,23 @@ from .views import (
     add_to_cart,
     remove_from_cart,
     CartView,
-    ShopView
+    ShopView,
+    myAccountView,
+    updateProfile,
 )
 
 
 urlpatterns = [
     path('shop/',ShopView.as_view(),name='shopview-url'),
+    path('shop/?q=<str:q>',ShopView.as_view(),name='shopviewq-url' ),
     path('shop/<int:id>/',CategoryView.as_view(),name='categoryview-url'),
     path('product/<int:pk>/',ProductView.as_view(),name='productview-url'),
     path('brand/<int:id>/',BrandView.as_view(),name='brandview-url'),
     path('add-to-cart/<int:id>/',add_to_cart,name='addtocart-url'),
     path('remove-from-cart/<int:id>',remove_from_cart,name='removefromcart-url'),
-    path('cart/',CartView.as_view(),name='cartview-url')
+    path('cart/',CartView.as_view(),name='cartview-url'),
+    path('profile/',myAccountView,name='myaccountview-url' ),
+    path('update/', updateProfile,name='up'),
+    
 
 ]

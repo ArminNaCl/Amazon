@@ -41,3 +41,8 @@ class UserLoginForm(AuthenticationForm):
         strip=False,
         widget=forms.PasswordInput(attrs={'autocomplete': 'current-password','class':"form-control"}),
     )
+
+class UserUpdateForm(forms.ModelForm):
+    class Meta:
+        model=User
+        fields=['image','first_name','last_name','email','mobile']
