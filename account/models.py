@@ -94,7 +94,7 @@ class Address(models.Model):
     
 
 class Shop(models.Model):
-    user = models.ForeignKey(User,related_name='shop', verbose_name=_("User") 
+    user = models.ForeignKey(User,related_name='shop',related_query_name='shop', verbose_name=_("User") 
                         ,on_delete=models.CASCADE)
     name = models.CharField(_("name") , max_length=120)
     discription = models.TextField(_("discription"), max_length=400)

@@ -100,6 +100,10 @@
                                     <div class="cart-and-bay-btn">
                                         <a class="btn hvr-hover" data-fancybox-close="" href="#">Buy New</a>
                                         <a class="btn hvr-hover" data-fancybox-close="" href="{% url 'addtocart-url' product.id %}">Add to cart</a>
+                                        {% if product.user %}
+                                        <a class="btn hvr-hover" data-fancybox-close="" href="{% url 'updateshopproduct-url' product.id %}">update</a>
+                                        <a class="btn hvr-hover" data-fancybox-close="" href="{% url 'addtocart-url' product.id %}">Add to cart</a>
+                                        {% endif %}
                                     </div>
                                 </div>
 

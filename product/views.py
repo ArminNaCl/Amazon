@@ -1,9 +1,12 @@
 from django.shortcuts import render,get_object_or_404,redirect
-from django.views.generic import DetailView,ListView ,UpdateView
+from django.views.generic import DetailView,ListView ,UpdateView,CreateView,FormView
 from django.db.models import Q
 from django.contrib.auth.views import get_user_model
-from account.forms import UserUpdateForm
+from account.forms import UserUpdateForm,ShopUpdateForm
+from account.models import Shop
+from product.forms import CreateShopProduct
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseNotAllowed,Http404
 
 User = get_user_model()
 
@@ -129,5 +132,60 @@ def updateProfile(request):
     else:
         form=UserUpdateForm(instance=request.user)
     return render(request,'siteview/update_form.html',{'form':form})
+
+@login_required
+def updateShop(request,id):
+    instance = get_object_or_404(Shop, id=id)
+    if instance.user == request.user:
+        if request.method == 'POST':
+            form = ShopUpdateForm(data=request.POST,instance=instance)
+            if form.is_valid():
+                form.save()
+                return redirect('shopview-url')
+        else:
+            form=ShopUpdateForm(instance=instance)
+        return render(request,'siteview/update_shop_form.html',{'form':form, 'id':id}) 
+    else:
+        return  HttpResponseNotAllowed('hello')
+
+
+class CreateShopProductView(CreateView):
+    form_class = ShopProduct
+    success_url= 'myaccountview-url'
+    template_name = 'siteview/checkout.html'
+    form_class =CreateShopProduct
+        
+        # form.shop = self.request.user.shop.all()
+    
+
+
+class CreateShopView(CreateView):
+    form_class = Shop
+    success_url= 'shopview-url'
+    template_name= 'siteview/createshop.html'
+    form_class= ShopUpdateForm
+    def form_valid(self,form):
+        shop = form.save(commit=False)
+        shop.user = self.request.user
+        shop.save()
+        return super().form_valid(form)
+
+class UpdateShopProduct(UpdateView):
+    model=ShopProduct
+    form_class=CreateShopView
+    fields=['price','quantity']
+    template_name='siteview/update_shopproduct.html'
+    success_url = 'shopview-url'
+    def get_context_data()
+    # def dispatch(self, request, *args, **kwargs):
+    #     obj = self.get_object()
+    #     if obj.shop.user != self.request.user:
+    #         raise Http404("You are not allowed to edit this Post")
+    #     return super(UpdateShopProduct, self).dispatch(request, *args, **kwargs)
+
+
+# def add_shop_product(request,*args,**kwargs):
+
+
 
 

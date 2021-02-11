@@ -93,10 +93,12 @@ class Image(models.Model):
 class ProductMeta(models.Model):
     product =models.ForeignKey(Product,on_delete=models.CASCADE)
     label = models.CharField(_("label"), max_length=60)
-    value = models.IntegerField(_("value"))
+    value = models.CharField(_("value"), max_length=60)
     class Meta:
         verbose_name = _('ProductMeta')
         verbose_name_plural = _('ProductsMetas')
+    def __str__(self):
+        return self.product.__str__()+'-'+str(self.label)
 
 
 class ShopProduct(models.Model):
