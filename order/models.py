@@ -19,6 +19,8 @@ class Basket(models.Model):
     class Meta:
         verbose_name = _('basket')
         verbose_name_plural = _('baskets')
+    def __str__(self):
+        return str(self.user.last_name)
 
 
 from product.models import ShopProduct ,Product

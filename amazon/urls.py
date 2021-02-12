@@ -24,6 +24,7 @@ urlpatterns = [
     path('',include('siteview.urls')),
     path('',include('account.urls')),
     path('',include('product.urls')),
+    path('',include('order.urls')),
 
 ]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL,
      document_root=settings.MEDIA_ROOT)
