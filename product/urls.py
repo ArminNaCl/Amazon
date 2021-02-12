@@ -12,7 +12,8 @@ from .views import (
     CreateShopProductView,
     updateShop,
     CreateShopView,
-    UpdateShopProduct
+    updateShopProductView,
+    DeleteShopProduct
 )
 
 
@@ -30,7 +31,8 @@ urlpatterns = [
     path('createproduct/',CreateShopProductView.as_view(),name='createproduct-url'),
     path('updateshop/<int:id>',updateShop,name='updateshop-url'),
     path('createshop/',CreateShopView.as_view(),name='createshop-url'),
-    path('updateshopproduct/<int:id>/',UpdateShopProduct.as_view(),name='updateshopproduct-url')
+    path('updateshopproduct/<int:id>',updateShopProductView,name='updateshopproduct-url'),
+    path('product/<int:pk>/delete',DeleteShopProduct.as_view(),name='deleteshopproduct-url')
     
 
 ]

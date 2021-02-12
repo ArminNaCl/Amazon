@@ -91,7 +91,7 @@ class Image(models.Model):
 
     
 class ProductMeta(models.Model):
-    product =models.ForeignKey(Product,on_delete=models.CASCADE)
+    product =models.ForeignKey(Product,on_delete=models.CASCADE ,related_name='metas' ,related_query_name= 'metas')
     label = models.CharField(_("label"), max_length=60)
     value = models.CharField(_("value"), max_length=60)
     class Meta:

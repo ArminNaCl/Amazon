@@ -142,6 +142,7 @@
                                 <h4>{{new.name}}</h4>
                                 
                                 <h5> {{new.best_price.price}}</h5>
+                                <h6>at {{new.best_price.shop}} {% if new.product.all.count > 1 %} and {{new.product.all.count|add:-1}} more {% endif %} </h6>
                             </div>
                         </div>
                     </div>

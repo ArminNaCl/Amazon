@@ -62,3 +62,4 @@ class ShopUpdateForm(forms.ModelForm):
             'name' : forms.TextInput(attrs={'class':"form-control"}),
             'discription' : forms.Textarea(attrs={'class':"form-control"}),
         }
+
