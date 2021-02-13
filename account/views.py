@@ -1,13 +1,13 @@
 from django.shortcuts import render,redirect,get_object_or_404
 from django.http import HttpResponseNotAllowed
-from django.views.generic.edit import CreateView 
+from django.views.generic.edit import CreateView ,DeleteView,UpdateView
 from django.views.generic import DetailView
 from django.contrib.auth.views import LoginView as Login , LogoutView as Logout ,get_user_model
 from django.contrib.auth import authenticate, login
 from order.models import Basket
 from django.contrib.auth.decorators import login_required
-from .forms import UserRegistrationForm ,UserLoginForm,UserUpdateForm,ShopUpdateForm
-from .models import Shop
+from .forms import UserRegistrationForm ,UserLoginForm,UserUpdateForm,ShopUpdateForm,AddressCreateForm
+from .models import Shop,Address
 
 
 
@@ -16,7 +16,7 @@ User = get_user_model()
 # Create your views here.
 class RegisteritionView(CreateView):
     form_class = UserRegistrationForm
-    template_name = 'siteview/registerition.html'
+    template_name = 'account/registerition.html'
     success_url = '/'
     def form_valid(self,form):
         valid = super(RegisteritionView, self).form_valid(form)
@@ -28,7 +28,7 @@ class RegisteritionView(CreateView):
         return valid
 
 class LoginView(Login):
-    template_name = 'siteview/login.html'
+    template_name = 'account/login.html'
     form_class = UserLoginForm
     success_url='/'
 
@@ -39,7 +39,7 @@ class LogoutView(Logout):
 class CreateShopView(CreateView):
     form_class = Shop
     success_url= 'shopview-url'
-    template_name= 'siteview/createshop.html'
+    template_name= 'account/create_shop.html'
     form_class= ShopUpdateForm
     def form_valid(self,form):
         shop = form.save(commit=False)
@@ -48,15 +48,9 @@ class CreateShopView(CreateView):
         return super().form_valid(form)
 
 
-
-
-
-
-
-
-
 @login_required
 def updateProfile(request):
+
     if request.method == 'POST':
         form = UserUpdateForm(data=request.POST,instance=request.user)
         if form.is_valid():
@@ -64,7 +58,9 @@ def updateProfile(request):
             return redirect('shopview-url')
     else:
         form=UserUpdateForm(instance=request.user)
-    return render(request,'siteview/update_form.html',{'form':form})
+    return render(request,'account/update_profile.html',
+            context={'form':form,'user':request.user,
+                    'shops':Shop.objects.filter(user=request.user)})
 
 @login_required
 def updateShop(request,id):
@@ -77,11 +73,49 @@ def updateShop(request,id):
                 return redirect('shopview-url')
         else:
             form=ShopUpdateForm(instance=instance)
-        return render(request,'siteview/update_shop_form.html',{'form':form, 'id':id}) 
+        return render(request,'account/update_shop.html',{'form':form, 'id':id}) 
     else:
         return  HttpResponseNotAllowed('hello')
 
+class DeleteShopView(DeleteView):
+    model=Shop
+    success_url = 'profile/update'
+    template_name='product/shopproduct_confirm_delete.html'
+    def get_object(self, queryset=None):
+        return Shop.objects.get(id=self.kwargs.get("id"))
 
+
+
+class EditAddressView(UpdateView):
+    model = Address
+    fields=['city','street','allay','zip_code']
+    success_url = 'profile/update'
+    template_name = 'account/update_address.html'
+    def get_object(self, queryset=None):
+        return Address.objects.get(id=self.kwargs.get("id"))
+
+class CreateAddressView(CreateView):
+    model = Address
+    fields=['city','street','allay','zip_code']
+    form = AddressCreateForm
+    success_url = 'profile/update'
+    template_name = 'account/add_address.html'
+    def form_valid(self,form):
+        add = form.save(commit=False)
+        add.user =self.request.user
+        add.save()
+        return super().form_valid(form)
+
+class DeleteAddressView(DeleteView):
+    model=Address
+    success_url = 'profile/update'
+    template_name='product/shopproduct_confirm_delete.html'
+    def get_object(self, queryset=None):
+        return Address.objects.get(id=self.kwargs.get("id"))
+
+
+
+        
 
 
 class ProfileView(DetailView):

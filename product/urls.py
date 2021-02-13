@@ -24,7 +24,7 @@ urlpatterns = [
 
     path('createproduct/',CreateShopProductView.as_view(),name='createproduct-url'),
     path('product/<int:pk>/delete',DeleteShopProduct.as_view(),name='deleteshopproduct-url'),
-    path('updateshopproduct/<int:id>',updateShopProductView,name='updateshopproduct-url'),
+    path('product/<int:id>/update',updateShopProductView,name='updateshopproduct-url'),
 
 
     

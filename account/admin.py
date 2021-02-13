@@ -42,3 +42,4 @@ class UserAdmin(BaseUserAdmin):
 #     model = Shop
 
 admin.site.register(Shop)
+admin.site.register(Address)

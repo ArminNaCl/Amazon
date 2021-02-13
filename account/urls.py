@@ -6,10 +6,17 @@ from account.views import (
     LogoutView,
     ProfileView,
     CreateShopView,
-
+    EditAddressView,
+    CreateAddressView,
+    DeleteAddressView,
+    DeleteShopView,
 
     updateProfile,
-    updateShop
+    updateShop,
+
+
+    
+    
 
 )
 
@@ -21,7 +28,13 @@ urlpatterns=[
     path('profile/',ProfileView.as_view(),name='profile-url'),
     path('profile/update', updateProfile,name='updateprofile-url'),
 
-    path('createshop/',CreateShopView.as_view(),name='createshop-url'),
+    path('shop/add',CreateShopView.as_view(),name='createshop-url'),
     path('shop/<int:id>/update',updateShop,name='updateshop-url'),
+    path('shop/<int:id>/delete',DeleteShopView.as_view(),name='deleteshop-url'),
+
+    path('profile/address/add',CreateAddressView.as_view(),name='addaddress-url'),
+    path('profile/address/<int:id>/update',EditAddressView.as_view(),name='editaddress-url'),
+    path('profile/address/<int:id>/delete',DeleteAddressView.as_view(),name='deleteaddress-url'),
+
 
 ]

@@ -83,6 +83,14 @@ class ShopView(ListView):
     def get_queryset(self):
         return self.results
               
+class CreateShopProductView(CreateView):
+    success_url= 'myaccountview-url'
+    template_name = 'siteview/checkout.html'
+    form_class =CreateShopProduct
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
 
 @login_required
 def updateShopProductView(request,id):
@@ -99,15 +107,6 @@ def updateShopProductView(request,id):
     else:
         return  HttpResponseNotAllowed('hello')
 
-
-class CreateShopProductView(CreateView):
-    success_url= 'myaccountview-url'
-    template_name = 'siteview/checkout.html'
-    form_class =CreateShopProduct
-    def get_form_kwargs(self):
-        kwargs = super().get_form_kwargs()
-        kwargs['user'] = self.request.user
-        return kwargs
 
 class DeleteShopProduct(DeleteView):
     model = ShopProduct

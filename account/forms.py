@@ -3,7 +3,7 @@ from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth import password_validation ,  get_user_model 
 from django.contrib.auth.forms import UserCreationForm ,AuthenticationForm ,UsernameField
-from .models import Shop
+from .models import Shop ,Address
 
 User = get_user_model()
 
@@ -63,3 +63,13 @@ class ShopUpdateForm(forms.ModelForm):
             'discription' : forms.Textarea(attrs={'class':"form-control"}),
         }
 
+class AddressCreateForm(forms.ModelForm):
+    class Meta:
+        model=Address 
+        fields = ['city','street','allay','zip_code']
+        widgets={
+            'city' : forms.TextInput(attrs={'class':"form-control"}),
+            'street' : forms.TextInput(attrs={'class':"form-control"}),
+            'allay' :  forms.TextInput(attrs={'class':"form-control"}),
+            'zip_code' : forms.NumberInput(attrs={'class':"form-control"}),  
+        }
