@@ -78,11 +78,16 @@
                 </div>
                 <div class="col-xl-7 col-lg-7 col-md-6">
                     <div class="single-product-details">
-                        <h2>{{product.product.name}}</h2>
+                        <h2>{{product.product.name}} {% if product.rate %} [{{product.rate}}] {% endif %}  </h2>
                         <h5> by <a href="{% url 'brandview-url' product.product.brand.id %}">{{product.product.brand}}</a></h5>
                         <p class="available-stock"><span> {{product.quantity}} available / <a href="#">in {{product.shop.name}} </a></span>
                             </p>
+                                {% if product.the_offer%}
+                                <h3><del> {{product.price}} </del> <span class="text-danger" >  {{product.the_offer.new_price}} </span> </h3>
+                                {% else %}
                                 <h3>$ {{product.price}} </h3>
+                                {% endif %}
+
                                 <h4>Short Description:</h4>
                                 <p>{{product.product.details}} </p>
 
@@ -92,14 +97,24 @@
 
                                 {% endfor %}
                                
-                                <div class="form-group size-st col-8  "> 
-                                    <label class="size-label">Store</label>
+                                <div class="form-group size-st col-12  "> 
+                                <br>
+                                    <div class="title-left">
+                                        <h3>Shops</h3>
+                                    </div>
                                     {% for shop in product.product.product.all %}
                                     <div>
-                                    {{shop.shop.name}} {{shop.price}} <a href="{% url 'productview-url' shop.id %}">This</a>    
+                                        
+                                            <h4 {% if shop.id == product.id %} class="text-danger" {% endif %}>
+                                            {{shop.shop.name}} {% if shop.the_offer %}  {{shop.the_offer.new_price}}{% else%} {{shop.price}}  {% endif %}
+                                            <a href="{% url 'productview-url' shop.id %}">This</a> </h4> 
+                                            
+                                         
                                     
                                     </div>
                                         {% endfor%}
+                                     <div class="title-left">
+                                    </div>
                                 </div>
                                  
 

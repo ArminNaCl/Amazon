@@ -2,6 +2,7 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from account.models import Shop ,User
 from django.core.validators import MaxValueValidator, MinValueValidator 
+from django.db.models import Sum
 # Create your models here.
 
 
@@ -122,11 +123,29 @@ class ShopProduct(models.Model):
     quantity = models.CharField(_("quantity") , max_length=120)
     create_at = models.DateTimeField(_("Create at"), auto_now_add=True)
     update_at = models.DateTimeField(_("Update at"), auto_now=True)
+
+    @property
+    def the_offer(self):
+        return self.offers.filter(expire=False).first()
+
+    @property   
+    def rate(self):
+        score = self.comments.all().aggregate(Sum('rate'))
+        score = score['rate__sum']
+        count = self.comments.all().count()
+        if count != 0:
+            return score/count
+        else:
+            return None
+
+
+
     class Meta:
         verbose_name = _('Shop Product')
         verbose_name_plural = _('Shop Products')
     def __str__(self):
         return self.shop.name+' '+self.product.name
+
 
 class Like(models.Model):
     user = models.ForeignKey(User, verbose_name=_("user"),related_name='like_product'
@@ -156,3 +175,44 @@ class Comment(models.Model):
 
     def __str__(self):
         return self.shop_product.__str__()
+
+class TrueofferManger(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().filter(expire=False)
+
+
+class Offer(models.Model):
+    shop_product = models.ForeignKey(ShopProduct,related_name='offers',related_query_name='offers',
+                    on_delete=models.CASCADE,verbose_name=_("shop product"))
+    percent = models.IntegerField(_('percent'),validators=[MinValueValidator(1), MaxValueValidator(99)])
+    expire = models.BooleanField(_('expire'),default=False)
+    create_at = models.DateTimeField(_("Create at"), auto_now_add=True)
+    expire_at = models.DateTimeField(_('expire date'))
+
+    objects = models.Manager()
+    trueoffer =TrueofferManger()
+    class Meta:
+        verbose_name = _("Offer")
+        verbose_name_plural = _("Offers")
+        ordering = ['-create_at']
+
+
+    def __str__(self):
+        return self.shop_product.__str__()
+
+    @property
+    def new_price(self):
+        return round(self.shop_product.price*(100-self.percent)/100,2)
+
+    @property
+    def cut_price(self):
+        return self.shop_product.price*self.percent/100
+
+    @property
+    def make_expire(self):
+        today= date.today()
+        if self.expire_at > today:
+            self.expire = True
+
+
+

@@ -8,13 +8,28 @@ User = get_user_model()
 class Basket(models.Model):
     user = models.OneToOneField(User, verbose_name=_("user"),related_name='baskets'
                                 ,on_delete=models.CASCADE)
-
+    
+    @property
     def total_price(self):
         total = 0
         all_items = self.basket_item.all()
         for items in all_items:
-            total += items.total_price()
+            total += items.total_price
         return total
+
+    @property
+    def sub_total(self):
+        total =0
+        all_items = self.basket_item.all()
+            for item in all_items:
+                total += item.product.price
+        return total
+
+
+    @property
+    def final_cut(self):
+        return self.sub_total - self.total_price
+
 
     class Meta:
         verbose_name = _('basket')
@@ -31,8 +46,14 @@ class BasketItem(models.Model):
                                 on_delete = models.CASCADE)
     quantity = models.IntegerField(default=1)
     
+    @property
     def total_price(self):
-        return self.quantity*self.product.price
+        print("f")
+        if self.product.the_offer:
+            print('hey')
+            return self.product.the_offer.new_price*self.quantity
+        else:
+            return self.product.price*self.quantity
 
     class Meta:
         verbose_name = _('basket_item')
@@ -62,9 +83,7 @@ class OrderItem(models.Model):
         verbose_name = _('order_item')
         verbose_name_plural = _('order_items')
 
-    @property
-    def total_price(self):
-        return self.price*self.count
+
 
 class Payment(models.Model):
     user = models.ForeignKey(User, verbose_name=_("user"),related_name='payment'

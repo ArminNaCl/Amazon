@@ -57,6 +57,7 @@
                                     <th>Product Name</th>
                                     <th>Shop</th>
                                     <th>Price</th>
+                                    <th>Offer</th>
                                     <th>Quantity</th>
                                     <th>Total</th>
                                     <th>Remove</th>
@@ -66,12 +67,12 @@
                                 {% for item in basket %}
                                 <tr>
                                     <td class="thumbnail-img">
-                                        <a href="{% url 'productview-url' item.product.product.id %}">
+                                        <a href="{% url 'productview-url' item.product.id %}">
 									<img class="img-fluid" src="{{item.product.product.album.default.image.url}}" alt="" />
 								</a>
                                     </td>
                                     <td class="name-pr">
-                                        <a href="#">
+                                        <a href="{% url 'productview-url' item.product.id %}">
 									{{item.product.product.name}}
 								</a>
                                     </td>
@@ -80,6 +81,9 @@
                                     </td>
                                     <td class="price-pr">
                                         <p>$ {{item.product.price}}</p>
+                                    </td>
+                                    <td class="offer-pr">
+                                        <p> %{{item.product.the_offer.percent}} </p>
                                     </td>
                                     <td class="quantity-box"><p>{{item.quantity}} </p></td>
                                     <td class="total-pr">
@@ -123,20 +127,20 @@
                         <h3>Order summary</h3>
                         <div class="d-flex">
                             <h4>Sub Total</h4>
-                            <div class="ml-auto font-weight-bold"> $ {{ basket.first.basket.total_price }} </div>
+                            <div class="ml-auto font-weight-bold"> $ {{ basket.first.basket.sub_total }} </div>
                         </div>
                         <div class="d-flex">
                             <h4>Discount</h4>
-                            <div class="ml-auto font-weight-bold"> $ 40 </div>
+                            <div class="ml-auto font-weight-bold"> $ {{basket.first.basket.final_cut}} </div>
                         </div>
                         <hr class="my-1">
                         <div class="d-flex">
                             <h4>Coupon Discount</h4>
-                            <div class="ml-auto font-weight-bold"> $ 10 </div>
+                            <div class="ml-auto font-weight-bold"> $ 0 </div>
                         </div>
                         <div class="d-flex">
                             <h4>Tax</h4>
-                            <div class="ml-auto font-weight-bold"> $ 2 </div>
+                            <div class="ml-auto font-weight-bold"> $ 0 </div>
                         </div>
                         <div class="d-flex">
                             <h4>Shipping Cost</h4>
@@ -145,7 +149,7 @@
                         <hr>
                         <div class="d-flex gr-total">
                             <h5>Grand Total</h5>
-                            <div class="ml-auto h5"> $ 388 </div>
+                            <div class="ml-auto h5"> $ {{basket.first.basket.total_price}} </div>
                         </div>
                         <hr> </div>
                 </div>

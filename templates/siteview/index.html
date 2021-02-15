@@ -131,7 +131,7 @@
                                 <img src="{{new.album.default.image.url}}" class="img-fluid" alt="Image">
                                 <div class="mask-icon">
                                     <ul>
-                                        <li><a href="{% url 'productview-url' new.id %}" data-toggle="tooltip" data-placement="right" title="View"><i class="fas fa-eye"></i></a></li>
+                                        <li><a href="{% url 'productview-url' new.best_price.id %}" data-toggle="tooltip" data-placement="right" title="View"><i class="fas fa-eye"></i></a></li>
                                         <li><a href="#" data-toggle="tooltip" data-placement="right" title="Compare"><i class="fas fa-sync-alt"></i></a></li>
                                         <li><a href="#" data-toggle="tooltip" data-placement="right" title="Add to Wishlist"><i class="far fa-heart"></i></a></li>
                                     </ul>
@@ -146,6 +146,32 @@
                             </div>
                         </div>
                     </div>
+                {% endfor %}
+                {% for off in offers %}
+                <div class="col-lg-3 col-md-6 special-grid top-featured">
+                    <div class="products-single fix">
+                        <div class="box-img-hover">
+                            <div class="type-lb">
+                                <p class="new">{{off.percent}} %</p>
+                            </div>
+                            <img src="{{off.shop_product.product.album.default.image.url}}" class="img-fluid" alt="Image">
+                            <div class="mask-icon">
+                                <ul>
+                                    <li><a href="{% url 'productview-url' off.shop_product.id %}" data-toggle="tooltip" data-placement="right" title="View"><i class="fas fa-eye"></i></a></li>
+                                    <li><a href="#" data-toggle="tooltip" data-placement="right" title="Compare"><i class="fas fa-sync-alt"></i></a></li>
+                                    <li><a href="#" data-toggle="tooltip" data-placement="right" title="Add to Wishlist"><i class="far fa-heart"></i></a></li>
+                                </ul>
+                                <a class="cart" href="#">Add to Cart</a>
+                            </div>
+                        </div>
+                        <div class="why-text">
+                                <h4>{{off.shop_product.product.name}}</h4>
+                                
+                                <h5><del> {{off.shop_product.price}} </del> <span class="text-danger" >  {{off.new_price}} </span> </h5>
+                                <h6>at {{off.shop_product.shop}}  </h6>
+                            </div>
+                    </div>
+                </div>
                 {% endfor %}
             </div>
         </div>
