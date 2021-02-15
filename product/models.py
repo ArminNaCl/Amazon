@@ -1,8 +1,22 @@
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from account.models import Shop ,User
+from django.core.validators import MaxValueValidator, MinValueValidator 
 # Create your models here.
 
+
+# COLOR_CHOICES = (
+#     ('green','GREEN'),
+#     ('blue', 'BLUE'),
+#     ('red','RED'),
+#     ('orange','ORANGE'),
+#     ('black','BLACK'),
+# )
+
+# class ShopProductMeta(models.Model):
+#     shop_product = models.ForeignKey('ShopProduct',related_name="metas", verbose_name=_("shop product"),
+#                                 on_delete=models.CASCADE)
+#     color = models.CharField(max_length=6, choices=COLOR_CHOICES, default='green')
 
 def get_upload_path(instance, filename):
     model = instance.album.model.__class__._meta
@@ -123,3 +137,22 @@ class Like(models.Model):
     class Meta:
         verbose_name = _('like')
         verbose_name_plural = _('likes')
+
+class Comment(models.Model):
+    rate = models.IntegerField(_("Rate"),default=1,validators=[MinValueValidator(1), MaxValueValidator(5)])
+    content = models.TextField(_("Content"))
+    shop_product = models.ForeignKey(ShopProduct, related_name='comments', related_query_name='comments', verbose_name=_(
+        "shop product"), on_delete=models.CASCADE)
+    create_at = models.DateTimeField(_("Create at"), auto_now_add=True)
+    update_at = models.DateTimeField(_("Update at"), auto_now=True)
+    author = models.ForeignKey(User, verbose_name=_(
+        "Author"),related_name='comments', on_delete=models.CASCADE)
+    is_confirmed = models.BooleanField(_("confirm"), default=True)
+
+    class Meta:
+        verbose_name = _("Comment")
+        verbose_name_plural = _("Comments")
+        ordering = ['-create_at']
+
+    def __str__(self):
+        return self.shop_product.__str__()

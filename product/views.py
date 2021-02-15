@@ -4,10 +4,12 @@ from django.db.models import Q
 from django.contrib.auth.views import get_user_model
 from account.forms import UserUpdateForm,ShopUpdateForm
 from account.models import Shop
-from product.forms import CreateShopProduct,UpdateShopProduct
+from product.forms import CreateShopProduct,UpdateShopProduct ,CommentForm
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseNotAllowed,Http404
 from django.urls import reverse_lazy
+from django.views.generic.edit import ModelFormMixin 
+
 User = get_user_model()
 
 from .models import (
@@ -39,15 +41,31 @@ class CategoryView(ListView):
         return context
 
 
-class ProductView(DetailView):
+class ProductView(DetailView,ModelFormMixin):
     template_name= 'siteview/shop-detail.html'
     model = ShopProduct
     context_object_name='product'
+    form_class= CommentForm
+    success_url ='#'
     def get_context_data(self,*args,**kwargs):
         context=super().get_context_data(*args,**kwargs)
         context['metas'] = self.get_object().product.metas.all()
         context['user'] = self.request.user
+        context['form'] = self.get_form()
+        context['comments']=self.get_object().comments.all()
+
         return context
+
+    def post (self,request,*args,**kwargs):
+        if self.request.user.is_authenticated :
+            # and self.get_object() in self.request.user.orders.order_item.product.all:
+            form = self.get_form()
+            if form.is_valid():
+                comment = form.save(commit=False)
+                comment.author = request.user
+                comment.shop_product = self.get_object()
+                comment.save()
+                return self.form_valid(form)
 
 class BrandView(DetailView):
     pass
