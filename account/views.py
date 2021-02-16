@@ -30,7 +30,7 @@ class RegisteritionView(CreateView):
 class LoginView(Login):
     template_name = 'account/login.html'
     form_class = UserLoginForm
-    success_url='/'
+    success_url='profile/update/'
 
 class LogoutView(Logout):
     next_page = '/'

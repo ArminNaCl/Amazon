@@ -17,6 +17,7 @@ from .models import (
     Product,
     ShopProduct,
     Brand,
+    Like
 
 )
 
@@ -53,6 +54,7 @@ class ProductView(DetailView,ModelFormMixin):
         context['user'] = self.request.user
         context['form'] = self.get_form()
         context['comments']=self.get_object().comments.all()
+        context['like'] = self.get_object().like
 
         return context
 
@@ -67,8 +69,15 @@ class ProductView(DetailView,ModelFormMixin):
                 comment.save()
                 return self.form_valid(form)
 
-class BrandView(DetailView):
-    pass
+class BrandView(ListView):
+    def get_queryset(self):
+        queryset = Product.objects.filter(brand=self.kwargs.get('id'))
+        return queryset
+    context_object_name = 'product'
+    paginate_by=9
+    template_name = 'siteview/shop.html'
+
+
 
 
 class ShopView(ListView):
@@ -80,6 +89,10 @@ class ShopView(ListView):
         context['category'] = Category.objects.filter(parent=None)
         context['brand'] = Brand.objects.all()
         context['thisurl']= self.request.GET.get('q','')
+        # context['sort_price_hl']= sorted(self.queryset, key=lambda product: product.price ,reverse=True)
+        # context['sort_price_lh']= sorted(self.queryset, key=lambda product: product.price)
+        # context['sort_sell']= sorted(self.queryset, key=lambda product: product.order_sale)
+        # context['sort_popularity']= sorted(self.queryset, key=lambda product: product.like)
         return context
 
     def get(self,request,*args,**kwargs):
@@ -125,6 +138,13 @@ def updateShopProductView(request,id):
     else:
         return  HttpResponseNotAllowed('hello')
 
+@login_required
+def like_product(request,id):
+    user = request.user
+    product = ShopProduct.objects.get(id=id)
+    Like.objects.get_or_create(product=product,user=user)
+
+    return redirect('shopview-url') 
 
 class DeleteShopProduct(DeleteView):
     model = ShopProduct

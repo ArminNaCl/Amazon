@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from account.models import Shop ,User
+from order.models import Order
 from django.core.validators import MaxValueValidator, MinValueValidator 
 from django.db.models import Sum
 # Create your models here.
@@ -80,15 +81,7 @@ class Product(models.Model):
         verbose_name_plural = _('Products')
     def __str__(self):
         return self.name
-    @property
-    def like_count(self):
-        querset = Like.objects.filter(prouduct = self,condition=True)
-        return querset.count()
 
-    @property
-    def disslike_count(self):
-        querset = Like.objects.filter(prouduct = self,condition=False)
-        return querset.count()  
     @property 
     def best_price(self) :
         queryset= self.product.order_by('price').first()
@@ -138,6 +131,21 @@ class ShopProduct(models.Model):
         else:
             return None
 
+    @property
+    def like(self):
+        likes = Like.objects.filter(product=self).all()
+        return likes.count()
+
+    def order_sale(self):
+        order = OrderItem.objects.filter(product=self).all().aggregate(Sum('count'))
+        order = order['count__sum']
+        return order
+
+    
+    def sale(self,value):
+        self.quantity = str(int(self.quantity) - int(value))
+        self.save(update_fields=["quantity"])
+
 
 
     class Meta:
@@ -150,12 +158,13 @@ class ShopProduct(models.Model):
 class Like(models.Model):
     user = models.ForeignKey(User, verbose_name=_("user"),related_name='like_product'
                             ,on_delete=models.CASCADE)
-    product = models.ForeignKey(Product,verbose_name=_("item"),related_name='like_product',
+    product = models.ForeignKey(ShopProduct,verbose_name=_("item"),related_name='like_product',
                                 on_delete = models.CASCADE)
-    condition = models.BooleanField(_("Condition"))  
     class Meta:
         verbose_name = _('like')
         verbose_name_plural = _('likes')
+    def __str__(self):
+        return self.product.product.name+' '+self.user.first_name
 
 class Comment(models.Model):
     rate = models.IntegerField(_("Rate"),default=1,validators=[MinValueValidator(1), MaxValueValidator(5)])

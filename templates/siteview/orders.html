@@ -1,0 +1,114 @@
+{% extends '../base/index.html'%}
+<html lang="en">
+<!-- Basic -->
+
+{% block title %} Cart {% endblock %}
+
+
+
+
+<body>
+
+{% block content %} 
+
+
+
+
+
+
+    <!-- Start Top Search -->
+    <div class="top-search">
+        <div class="container">
+            <div class="input-group">
+                <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                <input type="text" class="form-control" placeholder="Search">
+                <span class="input-group-addon close-search"><i class="fa fa-times"></i></span>
+            </div>
+        </div>
+    </div>
+    <!-- End Top Search -->
+
+    <!-- Start All Title Box -->
+    <div class="all-title-box">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h2>Orders</h2>
+                    <ul class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{% url 'profile-url' %}">{{request.user.last_name}}</a></li>
+                        <li class="breadcrumb-item active">Orders</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End All Title Box -->
+
+    <!-- Start Cart  -->
+    <div class="cart-box-main">
+        <div class="container">
+            <div class="row">
+            {% for order in orders %}
+                <div class="col-12">
+                    <div class="title-left">
+                        <h3>{{order.create_at|date:"G:i d,M,Y"}}</h3>
+                    </div>
+                    <h5><a data-toggle="collapse" href="#{{order.id}}" role="button" aria-expanded="false">Click here to See</a></h5>
+                    <div class="mt-3 collapse" id="{{order.id}}">
+                        <div class="col-lg-12">
+                            <div class="table-main table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Product Name</th>
+                                            <th>Shop</th>
+                                            <th>Price</th>
+                                            <th>Offer</th>
+                                            <th>Quantity</th>
+                                            <th>Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for item in order.order_item.all %}
+                                        <tr>
+                                           
+                                            <td class="name-pr">
+                                                <a href="{% url 'productview-url' item.product.id %}">
+			        						{{item.product.product.name}}
+			        					</a>
+                                            </td>
+                                            <td class="shop-pr">
+                                                <p>{{item.product.shop.name}}</p>
+                                            </td>
+                                            <td class="price-pr">
+                                                <p>$ {{item.product.price}}</p>
+                                            </td>
+                                            <td class="offer-pr">
+                                                <p> %{{item.product.the_offer.percent}} </p>
+                                            </td>
+                                            <td class="quantity-box"><p>{{item.count}} </p></td>
+                                            <td class="total-pr">
+                                                <p>$ {{ item.price }} </p>
+                                            </td>
+                                           
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+            </div>
+        </div>
+    </div>
+    <!-- End Cart -->
+
+
+
+
+{% endblock %}
+</body>
+
+</html>

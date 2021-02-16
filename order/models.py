@@ -21,14 +21,16 @@ class Basket(models.Model):
     def sub_total(self):
         total =0
         all_items = self.basket_item.all()
-            for item in all_items:
-                total += item.product.price
+        for item in all_items:
+            total += item.product.price
         return total
 
 
     @property
     def final_cut(self):
         return self.sub_total - self.total_price
+
+
 
 
     class Meta:
@@ -38,11 +40,10 @@ class Basket(models.Model):
         return str(self.user.last_name)
 
 
-from product.models import ShopProduct ,Product
 class BasketItem(models.Model):
-    basket = models.ForeignKey(Basket,verbose_name=_("basket"),related_name='basket_item',
+    basket = models.ForeignKey('order.Basket',verbose_name=_("basket"),related_name='basket_item',
                                 on_delete= models.CASCADE)
-    product = models.ForeignKey(ShopProduct,verbose_name=_("item"),related_name='basket_item',
+    product = models.ForeignKey('product.ShopProduct',verbose_name=_("item"),related_name='basket_item',
                                 on_delete = models.CASCADE)
     quantity = models.IntegerField(default=1)
     
@@ -69,15 +70,18 @@ class Order(models.Model):
     class Meta:
         verbose_name = _('order')
         verbose_name_plural = _('orders')
+    def __str__(self):
+        return str(self.user.last_name)+' order '+str(self.create_at)
     
 
 class OrderItem(models.Model):
     order= models.ForeignKey(Order,verbose_name=_('order'), related_name= 'order_item',
                             on_delete=models.CASCADE)
-    product = models.ForeignKey(ShopProduct,verbose_name=_("item"),related_name='order_item',
-                                on_delete = models.CASCADE)
+    product = models.ForeignKey('product.ShopProduct',verbose_name=_("item"),related_name='order_item',
+                                on_delete = models.PROTECT)
+    offer = models.ForeignKey('product.Offer',verbose_name=_('offer') , on_delete = models.PROTECT ,null=True)
     count = models.IntegerField(_('count'))
-    price = models.IntegerField(_('price'))
+    price = models.DecimalField(max_digits=7, decimal_places=2)
 
     class Meta:
         verbose_name = _('order_item')

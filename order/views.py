@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect
 from django.shortcuts import get_object_or_404
 from product.models import ShopProduct
-from .models import Basket ,BasketItem
+from .models import Basket ,BasketItem ,Order,OrderItem
 from django.views.generic import ListView
 
 
@@ -30,9 +30,39 @@ def remove_from_cart(request,id):
 class CartView(ListView):
     context_object_name = 'basket'
     def get(self,request,*args,**kwargs):
-        basket = Basket.objects.get(user=request.user)
+        basket = get_object_or_404(Basket,user=request.user)
         self.results = basket.basket_item.all()
         return super().get(request,*args,**kwargs)
     def get_queryset(self):
         return self.results
     template_name= "siteview/cart.html"
+
+class OrdersView(ListView):
+    def get(self,request,*args,**kwargs):
+        self.results =self.request.user.orders.all()
+        return super().get(request,*args,**kwargs)
+    def get_queryset(self):
+        return self.results
+    template_name='siteview/orders.html'
+    context_object_name = 'orders'
+
+    
+
+def cart_to_order(request):
+    basket = request.user.baskets
+    order = Order.objects.create(user=request.user,discription='')
+    for item in basket.basket_item.all():
+        _shopproduct = item.product
+        _offer = item.product.the_offer
+        _count = item.quantity
+        _price = item.total_price
+        order_item =  OrderItem.objects.create(
+            order=order,
+            product=_shopproduct,
+            price=_price,
+            offer=_offer,
+            count=_count,
+        )
+        _shopproduct.sale(_count)
+        item.delete()
+    return redirect('cartview-url') 
