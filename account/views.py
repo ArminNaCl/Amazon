@@ -52,6 +52,7 @@ class CreateShopView(CreateView):
 def updateProfile(request):
 
     if request.method == 'POST':
+        print('ggg')
         form = UserUpdateForm(data=request.POST,instance=request.user)
         if form.is_valid():
             form.save()

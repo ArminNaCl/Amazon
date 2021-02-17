@@ -44,6 +44,8 @@ class UserLoginForm(AuthenticationForm):
     )
 
 class UserUpdateForm(forms.ModelForm):
+
+    
     class Meta:
         model=User
         fields=['image','first_name','last_name','email','mobile']
