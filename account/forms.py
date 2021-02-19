@@ -55,6 +55,22 @@ class UserUpdateForm(forms.ModelForm):
             'mobile' :  forms.TextInput(attrs={'class':"form-control"}),
             'email' : forms.TextInput(attrs={'class':"form-control"}),   
         }
+    def save(self,commit=True):
+        user =self.instance
+        user.first_name = self.cleaned_data['first_name']
+        user.last_name = self.cleaned_data['last_name']
+        user.mobile = self.cleaned_data['mobile']
+        user.email = self.cleaned_data['email']
+        if self.cleaned_data['image']:
+            print("im in")
+            user.image= self.cleaned_data['image']
+        if commit:
+            user.save()
+        return user
+
+
+
+
 
 class ShopUpdateForm(forms.ModelForm):
     class Meta:

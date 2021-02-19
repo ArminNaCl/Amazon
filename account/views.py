@@ -52,11 +52,11 @@ class CreateShopView(CreateView):
 def updateProfile(request):
 
     if request.method == 'POST':
-        print('ggg')
-        form = UserUpdateForm(data=request.POST,instance=request.user)
+
+        form = UserUpdateForm(request.POST,request.FILES or None,instance=request.user)
         if form.is_valid():
             form.save()
-            return redirect('shopview-url')
+            return redirect('profile-url')
     else:
         form=UserUpdateForm(instance=request.user)
     return render(request,'account/update_profile.html',
