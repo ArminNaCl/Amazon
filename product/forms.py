@@ -1,5 +1,5 @@
 from django import forms
-from .models import ShopProduct ,Comment
+from .models import ShopProduct ,Comment ,Offer
 from django.utils.translation import ugettext_lazy as _
 
 
@@ -40,3 +40,13 @@ class CommentForm(forms.ModelForm):
             'content': forms.Textarea(attrs={'class':"form-control"}),
             'rate': forms.NumberInput(attrs={'class':"form-control"}),
         }
+
+class OfferForm(forms.ModelForm):
+    class Meta:
+        model = Offer
+        fields =  {'percent','expire_at'}
+        widgets={
+            'expire_at': forms.DateInput(attrs={'class':"form-control"}),
+            'percent': forms.NumberInput(attrs={'class':"form-control"}),
+        }
+    

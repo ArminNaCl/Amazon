@@ -4,12 +4,12 @@ from account.views import (
     LoginView,
     RegisteritionView,
     LogoutView,
-    ProfileView,
     CreateShopView,
     EditAddressView,
     CreateAddressView,
     DeleteAddressView,
     DeleteShopView,
+    ShopAdminView,
 
     updateProfile,
     updateShop,
@@ -25,12 +25,12 @@ urlpatterns=[
     path('register/', RegisteritionView.as_view(),name="Registerition-url"),
     path('logout/', LogoutView.as_view(),name="logout-url"),
 
-    path('profile/',ProfileView.as_view(),name='updateprofile-url'),
     path('profile/update', updateProfile,name='profile-url'),
 
     path('shop/add',CreateShopView.as_view(),name='createshop-url'),
     path('shop/<int:id>/update',updateShop,name='updateshop-url'),
     path('shop/<int:id>/delete',DeleteShopView.as_view(),name='deleteshop-url'),
+    path('shop/<int:id>',ShopAdminView.as_view(),name='shopadmin-url'),
 
     path('profile/address/add',CreateAddressView.as_view(),name='addaddress-url'),
     path('profile/address/<int:id>/update',EditAddressView.as_view(),name='editaddress-url'),

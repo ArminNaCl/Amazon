@@ -110,7 +110,7 @@ class ProductMeta(models.Model):
 
 
 class ShopProduct(models.Model):
-    shop= models.ForeignKey(Shop, verbose_name=_("shop"),on_delete=models.CASCADE)
+    shop= models.ForeignKey(Shop, verbose_name=_("shop"),on_delete=models.CASCADE,related_name='product',related_query_name='product')
     product= models.ForeignKey(Product, verbose_name=_("Product"),related_name='product', on_delete=models.CASCADE)
     price = models.DecimalField(max_digits=7, decimal_places=2)
     quantity = models.CharField(_("quantity") , max_length=120)

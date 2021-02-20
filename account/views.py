@@ -1,6 +1,6 @@
 from django.shortcuts import render,redirect,get_object_or_404
 from django.http import HttpResponseNotAllowed
-from django.views.generic.edit import CreateView ,DeleteView,UpdateView
+from django.views.generic import CreateView ,DeleteView,UpdateView,ListView
 from django.views.generic import DetailView
 from django.contrib.auth.views import LoginView as Login , LogoutView as Logout ,get_user_model
 from django.contrib.auth import authenticate, login
@@ -114,10 +114,27 @@ class DeleteAddressView(DeleteView):
     def get_object(self, queryset=None):
         return Address.objects.get(id=self.kwargs.get("id"))
 
-
-
         
+class ShopAdminView(ListView):
+    context_object_name = 'products'
+    paginate_by =9
+    template_name="account/shopadmin.html"
+    def get_queryset(self):
+        self.shop = Shop.objects.get(id=self.kwargs.get("id"))
+        return self.shop.product.all()
+    def get_context_data(self):
+        context= super().get_context_data()
+        context['shop'] = self.shop
+        return context
+    def user_passes_test(self,request,*args,**kwargs):
+        if request.user.is_authenticated:
+            self.object = Shop.objects.get(id=self.kwargs.get("id"))
+            return self.object.user == request.user
+        return False
+    def dispatch(self,request ,*args,**kwargs):
+        if not self.user_passes_test(request,*args,**kwargs):
+            return redirect('homeview-url')
+        return super().dispatch(request,*args,**kwargs)
 
 
-class ProfileView(DetailView):
-    pass
+

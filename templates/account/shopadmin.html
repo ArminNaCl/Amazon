@@ -1,0 +1,123 @@
+{% extends '../base/index.html'%}
+<html lang="en">
+<!-- Basic -->
+
+{% block title %}shop {% endblock %}
+
+
+<body>
+
+    {% block content%}
+    
+    <!-- Start Top Search -->
+    <div class="top-search">
+        <div class="container">
+            <div class="input-group">
+                <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                <input type="text" class="form-control" placeholder="Search">
+                <span class="input-group-addon close-search"><i class="fa fa-times"></i></span>
+            </div>
+        </div>
+    </div>
+    <!-- End Top Search -->
+
+    <!-- Start All Title Box -->
+    <div class="all-title-box">
+        <div class="container">
+            <div class="row" >
+                <div class="col-lg-4" >
+                    <img src="{{shop.image.url}}" class="img-fluid" alt="Image">
+                </div>
+                <div class="col-lg-4" >
+                    <h2>{{shop.name}}</h2>
+                    <ul class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{% url 'homeview-url'%}">Home</a></li>
+                        <li class="breadcrumb-item active">Shop</li>
+                    </ul>
+                </div>
+                <div class="col-lg-4"  >
+                    <h1 class="text-white">about </h1>
+                    <p class="text-white">{{shop.discription}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End All Title Box -->
+
+    <!-- Start Shop Page  -->
+    <div class="shop-box-inner">
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-sm-12 col-xs-12 shop-content-right">
+                    <div class="right-product-box">
+                        <div class="row product-categorie-box">
+                            <div class="tab-content">
+                                <div role="tabpanel" class="tab-pane fade show active" id="grid-view">
+                                    <div class="row">
+                                    {% for pro in products %}
+                                        <div class="col-sm-6 col-md-6 col-lg-3 col-xl-3">
+                                            <div class="products-single fix">
+                                                <div class="box-img-hover">
+                                                    <div class="type-lb">
+                                                        <p class="sale">{{shop.name}}</p>
+                                                    </div>
+                                                    <img src="{{pro.product.album.default.image.url}}" class="img-fluid" alt="Image">
+                                                    <div class="mask-icon">
+                                                        <ul>  
+                                                            <li><a href="{% url 'productview-url' pro.id %}" data-toggle="tooltip" data-placement="right" title="View"><i class="fas fa-eye"></i></a></li>
+                                                            <li><a href="{% url 'updateshopproduct-url' pro.id %}" data-toggle="tooltip" data-placement="right" title="Compare"><i class="fas fa-edit"></i></a></li>
+                                                            <li><a href="{% url 'deleteshopproduct-url' pro.id %}" data-toggle="tooltip" data-placement="right" title="Add to Wishlist"><i class="fas fa-trash-alt"></i></a></li>
+                                                        </ul>
+                                                        <a class="cart" href="{% url 'productview-url' pro.id %}"> See the Product</a>
+                                                    </div>
+                                                </div>
+                                                <div class="why-text">
+                                                    <h4>{{pro.product.name}}</h4>
+                                                    <h4>{{pro.quantity}}
+                                                    <h5> $ {{ pro.price }}</h5>
+                                                </div>
+                                            </div> 
+                                        </div>
+                                    {% endfor %}
+                                    <div class="col-sm-6 col-md-6 col-lg-3 col-xl-3">
+                                            <div class="products-single fix">
+                                                <div class="box-img-hover">
+                                                    <div class="type-lb">
+                                                        <p class="sale">add-product</p>
+                                                    </div>
+                                                    <img src="https://cdn2.iconfinder.com/data/icons/ecommerce-solid-version/32/add_product_new_product_item_ecommerceproduct--512.png" class="img-fluid" alt="Image">
+                                                    <div class="mask-icon">
+                                                        {% comment %} <ul>  
+                                                            <li><a href="{% url 'productview-url' pro.id %}" data-toggle="tooltip" data-placement="right" title="View"><i class="fas fa-eye"></i></a></li>
+                                                            <li><a href="{% url 'updateshopproduct-url' pro.id %}" data-toggle="tooltip" data-placement="right" title="Compare"><i class="fas fa-edit"></i></a></li>
+                                                            <li><a href="{% url 'deleteshopproduct-url' pro.id %}" data-toggle="tooltip" data-placement="right" title="Add to Wishlist"><i class="fas fa-trash-alt"></i></a></li>
+                                                        </ul> {% endcomment %}
+                                                        <a class="cart" href="{% url 'createproduct-url'%}"> See the Product</a>
+                                                    </div>
+                                                </div>
+                                                <div class="why-text">
+                                                    <h4>add product</h4>
+                                                    <h4>add product</h4>
+                                                    <h5> add product</h5>
+                                                </div>
+                                            </div> 
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Shop Page -->
+
+    {% endblock %}
+
+
+  
+</body>
+
+</html>

@@ -9,6 +9,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseNotAllowed,Http404
 from django.urls import reverse_lazy
 from django.views.generic.edit import ModelFormMixin 
+from django.utils.decorators import method_decorator
 
 User = get_user_model()
 
@@ -149,6 +150,26 @@ def like_product(request,id):
 class DeleteShopProduct(DeleteView):
     model = ShopProduct
     success_url = '/'
+
+@method_decorator(login_required, name='dispatch')
+class WishListView(ListView):
+    context_object_name = 'products'
+    paginate_by =9
+    template_name="product/wishlist.html"
+    def get_queryset(self):
+        self.user = self.request.user
+        return self.user.like_product.all()
+    def get_context_data(self):
+        context= super().get_context_data()
+        return context
+
+
+class DeleteLikeView(DeleteView):
+    model=Like
+    success_url = 'profile/wishlist'
+    template_name='product/shopproduct_confirm_delete.html'
+    def get_object(self, queryset=None):
+        return Like.objects.get(id=self.kwargs.get("id"))
 
 
 
