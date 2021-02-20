@@ -4,7 +4,7 @@ from django.db.models import Q
 from django.contrib.auth.views import get_user_model
 from account.forms import UserUpdateForm,ShopUpdateForm
 from account.models import Shop
-from product.forms import CreateShopProduct,UpdateShopProduct ,CommentForm
+from product.forms import CreateShopProduct,UpdateShopProduct ,CommentForm,OfferForm
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseNotAllowed,Http404
 from django.urls import reverse_lazy
@@ -170,6 +170,29 @@ class DeleteLikeView(DeleteView):
     template_name='product/shopproduct_confirm_delete.html'
     def get_object(self, queryset=None):
         return Like.objects.get(id=self.kwargs.get("id"))
+
+class AddOfferView(CreateView):
+    template_name="product/addoffer.html"
+    form_class= OfferForm
+    success_url= "success"
+    def form_valid(self,form,*args,**kwargs):
+        offer = form.save(commit=False)
+        offer.shop_product = ShopProduct.objects.get(id=self.kwargs.get("id"))
+        offer.save()
+        return super().form_valid(form,*args,**kwargs)
+    def get_context_data(self):
+        context= super().get_context_data()
+        context['product'] = ShopProduct.objects.get(id=self.kwargs.get("id"))
+        return context
+    def user_passes_test(self,request,*args,**kwargs):
+        if request.user.is_authenticated:
+            self.object = ShopProduct.objects.get(id=self.kwargs.get("id"))
+            return self.object.shop.user == request.user
+        return False
+    def dispatch(self,request ,*args,**kwargs):
+        if not self.user_passes_test(request,*args,**kwargs):
+            return redirect('homeview-url')
+        return super().dispatch(request,*args,**kwargs)
 
 
 

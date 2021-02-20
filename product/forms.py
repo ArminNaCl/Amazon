@@ -46,7 +46,7 @@ class OfferForm(forms.ModelForm):
         model = Offer
         fields =  {'percent','expire_at'}
         widgets={
-            'expire_at': forms.DateInput(attrs={'class':"form-control"}),
+            'expire_at': forms.DateInput(attrs={'class':"form-control" ,'type':"date"}),
             'percent': forms.NumberInput(attrs={'class':"form-control"}),
         }
     

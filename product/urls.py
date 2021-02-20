@@ -7,6 +7,7 @@ from .views import (
     CreateShopProductView,
     WishListView,
     DeleteLikeView,
+    AddOfferView,
 
 
     updateShopProductView,
@@ -21,8 +22,7 @@ urlpatterns = [
     path('product/<int:pk>/',ProductView.as_view(),name='productview-url'),
     path('brand/<int:id>/',BrandView.as_view(),name='brandview-url'),
 
-
-
+    path('product/<int:id>/offer/',AddOfferView.as_view(),name='addoffer-url'),
 
 
     path('createproduct/',CreateShopProductView.as_view(),name='createproduct-url'),
@@ -33,6 +33,8 @@ urlpatterns = [
     path('profile/wishlist/<int:id>/remove',DeleteLikeView.as_view(),name='removelike-url'),
 
     path('profile/wishlist/' ,WishListView.as_view(),name='wishlistview-url'),
+
+    
 
 
     
