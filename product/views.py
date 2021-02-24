@@ -56,12 +56,12 @@ class ProductView(DetailView,ModelFormMixin):
         context['form'] = self.get_form()
         context['comments']=self.get_object().comments.all()
         context['like'] = self.get_object().like
+        context['ca'] = self.get_object().isbuy(self.request.user.id)
 
         return context
 
     def post (self,request,*args,**kwargs):
-        if self.request.user.is_authenticated :
-            # and self.get_object() in self.request.user.orders.order_item.product.all:
+        if self.request.user.is_authenticated and self.get_object().isbuy(self.request.user.id) :
             form = self.get_form()
             if form.is_valid():
                 comment = form.save(commit=False)
@@ -109,6 +109,10 @@ class ShopView(ListView):
         
         if _brand:
             self.results = self.results.filter(brand__id = _brand)
+
+        if _shop:
+            self.results = ShopProduct.objects.filter(shop__id=_shop)
+
         
         if _to and _from :
             self.price_range = list()

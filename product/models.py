@@ -1,7 +1,7 @@
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from account.models import Shop ,User
-from order.models import Order
+from order.models import Order,OrderItem
 from django.core.validators import MaxValueValidator, MinValueValidator 
 from django.db.models import Sum
 # Create your models here.
@@ -136,6 +136,13 @@ class ShopProduct(models.Model):
             return score/count
         else:
             return None
+
+    def isbuy(self,user_obj):
+        items = OrderItem.objects.filter(order__user__id=user_obj)
+        for item in items :
+            if item.product == self:
+                return True
+        return False
 
     @property
     def like(self):
