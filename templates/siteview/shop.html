@@ -93,12 +93,27 @@
                             <div class="title-left">
                                 <h3>Brand</h3>
                             </div>
-                            <div class="brand-box">
+                            <div class="brand--box">
                                 <ul>
                                     {% for br in brand%}
                                     <li>
                                         <div class="radio radio-danger">
-                                            <input name="brand" id="Radios1" value="{{br.id}}" type="checkbox">
+                                            <input name="brand" id="Radios1" value="{{br}}" type="checkbox">
+                                            <label for="Radios1"> {{br.name}} </label>
+                                        </div>
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                            <div class="title-left">
+                                <h3>Shop</h3>
+                            </div>
+                            <div class="shop-box">
+                                <ul>
+                                    {% for br in shops%}
+                                    <li>
+                                        <div class="radio radio-danger">
+                                            <input name="shop" id="Radios1" value="{{br.id}}" type="checkbox">
                                             <label for="Radios1"> {{br.name}} </label>
                                         </div>
                                     </li>
@@ -169,6 +184,11 @@
                                         </div>
                                                 {% endfor %}
                                     </div>
+                                               <hr style="height:2px;border-width:0;color:gray;background-color:gray"> 
+                                            <div>
+                                                {% include "component/pagination.html" with page=posts %}
+                                            </div>
+
                                 </div>
                             </div>
                         </div>

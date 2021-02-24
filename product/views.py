@@ -83,12 +83,13 @@ class BrandView(ListView):
 
 class ShopView(ListView):
     context_object_name = 'product'
-    paginate_by=9
+    paginate_by=3
     template_name = 'siteview/shop.html'
     def get_context_data(self):
         context = super().get_context_data()
         context['category'] = Category.objects.filter(parent=None)
         context['brand'] = Brand.objects.all()
+        context['shops'] = Shop.objects.all()
         context['thisurl']= self.request.GET.get('q','')
         # context['sort_price_hl']= sorted(self.queryset, key=lambda product: product.price ,reverse=True)
         # context['sort_price_lh']= sorted(self.queryset, key=lambda product: product.price)
@@ -100,6 +101,7 @@ class ShopView(ListView):
         _to =request.GET.get('price_to')
         _from = request.GET.get('price_from')
         _brand = request.GET.get('brand')
+        _shop = request.GET.get('shop')
         q = request.GET.get('q')
         self.results = Product.objects.all()
         if q:
@@ -108,7 +110,18 @@ class ShopView(ListView):
         if _brand:
             self.results = self.results.filter(brand__id = _brand)
         
-        # self.results = self.results.filter(best_price__price__gt =_from)
+        if _to and _from :
+            self.price_range = list()
+            for product in self.results:
+                low,high = product.price_range
+                if low<float(_to) and high>float(_from):
+                    self.price_range.append(product)
+            self.results =self.price_range
+
+        if _shop :
+            print(_shop)
+
+
         self.results = list(set(self.results))
         return super().get(request)
 

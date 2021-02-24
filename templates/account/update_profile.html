@@ -62,22 +62,22 @@
                                 {% for address in user.address.all %}
                                     <h3> Address : {{address.zip_code}},{{address.allay}},{{address.street}},{{address.city}} 
                                     <span>
-                                        <a href="{% url 'editaddress-url' address.id %}"> (Edit)</a>
-                                        <a href="{% url 'deleteaddress-url' address.id %}">(Delete)</a>
+                                        <a href="{% url 'editaddress-url' address.id %}"title="Edit"><i class="fas fa-edit"></i></a>
+                                        <a href="{% url 'deleteaddress-url' address.id %}"title="Delete"><i class="fas fa-trash-alt"></i></a>
                                     </span>
                                     </h3>
                                 {% endfor %}
-                                    <h3><a href="{% url 'addaddress-url' %}"> + add</h3>
+                                    <h3><a href="{% url 'addaddress-url' %}"> + add </a></h3>
                             
                                 <div class="title-left col-md-12">
                                 <br>
                                     <h3> Shops </h3>
                                 </div> 
                                 {% for shop in shops %}
-                                    <h3>  {{shop.name}}({{shop.create_at|date:"Y"}})
+                                    <h3> <a href="{% url 'shopadmin-url' shop.id %} " title="ShopAdmin"> {{shop.name}}({{shop.create_at|date:"Y"}})</a>
                                     <span>
-                                        <a href="{% url 'updateshop-url' shop.id %}"> (Edit)</a>
-                                        <a href="{% url 'deleteshop-url' shop.id %}">(Delete)</a>
+                                        <a href="{% url 'updateshop-url' shop.id %} " title="Edit"><i class="fas fa-edit"></i></a>
+                                        <a href="{% url 'deleteshop-url' shop.id %}" title="Delete"><i class="fas fa-trash-alt"></i></a>
                                     </span>
                                     </h3>
                                 {% endfor %}
@@ -93,7 +93,7 @@
                             <a class="btn hvr-hover" data-fancybox-close="" href="{% url 'orderview-url'  %}">Order</a>
                         </div>
                         <div class='col-4'>
-                            <a class="btn hvr-hover" data-fancybox-close="" href="{% url 'cartview-url'  %}">Likes</a>
+                            <a class="btn hvr-hover" data-fancybox-close="" href="{% url 'wishlistview-url'  %}">Likes</a>
                         </div>
                             
 

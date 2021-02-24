@@ -64,9 +64,9 @@
                                                     <img src="{{pro.product.album.default.image.url}}" class="img-fluid" alt="Image">
                                                     <div class="mask-icon">
                                                         <ul>  
-                                                            <li><a href="{% url 'productview-url' pro.id %}" data-toggle="tooltip" data-placement="right" title="View"><i class="fas fa-eye"></i></a></li>
-                                                            <li><a href="{% url 'updateshopproduct-url' pro.id %}" data-toggle="tooltip" data-placement="right" title="Compare"><i class="fas fa-edit"></i></a></li>
-                                                            <li><a href="{% url 'deleteshopproduct-url' pro.id %}" data-toggle="tooltip" data-placement="right" title="Add to Wishlist"><i class="fas fa-trash-alt"></i></a></li>
+                                                            <li><a href="{% url 'addoffer-url' pro.id %}" data-toggle="tooltip" data-placement="right" title="Offer"><i class="fas fa-percent"></i></a></li>
+                                                            <li><a href="{% url 'updateshopproduct-url' pro.id %}" data-toggle="tooltip" data-placement="right" title="Edit"><i class="fas fa-edit"></i></a></li>
+                                                            <li><a href="{% url 'deleteshopproduct-url' pro.id %}" data-toggle="tooltip" data-placement="right" title="Delete"><i class="fas fa-trash-alt"></i></a></li>
                                                         </ul>
                                                         <a class="cart" href="{% url 'productview-url' pro.id %}"> See the Product</a>
                                                     </div>
@@ -87,11 +87,6 @@
                                                     </div>
                                                     <img src="https://cdn2.iconfinder.com/data/icons/ecommerce-solid-version/32/add_product_new_product_item_ecommerceproduct--512.png" class="img-fluid" alt="Image">
                                                     <div class="mask-icon">
-                                                        {% comment %} <ul>  
-                                                            <li><a href="{% url 'productview-url' pro.id %}" data-toggle="tooltip" data-placement="right" title="View"><i class="fas fa-eye"></i></a></li>
-                                                            <li><a href="{% url 'updateshopproduct-url' pro.id %}" data-toggle="tooltip" data-placement="right" title="Compare"><i class="fas fa-edit"></i></a></li>
-                                                            <li><a href="{% url 'deleteshopproduct-url' pro.id %}" data-toggle="tooltip" data-placement="right" title="Add to Wishlist"><i class="fas fa-trash-alt"></i></a></li>
-                                                        </ul> {% endcomment %}
                                                         <a class="cart" href="{% url 'createproduct-url'%}"> See the Product</a>
                                                     </div>
                                                 </div>

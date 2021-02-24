@@ -82,6 +82,12 @@ class Product(models.Model):
     def __str__(self):
         return self.name
 
+    @property
+    def price_range(self):
+        low= self.product.order_by('price').first().price
+        high= self.product.order_by('price').last().price
+        return low,high
+
     @property 
     def best_price(self) :
         queryset= self.product.order_by('price').first()
