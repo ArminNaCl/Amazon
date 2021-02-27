@@ -18,7 +18,8 @@ from .models import (
     Product,
     ShopProduct,
     Brand,
-    Like
+    Like,
+    ShopProduct
 
 )
 
@@ -77,6 +78,23 @@ class BrandView(ListView):
     context_object_name = 'product'
     paginate_by=9
     template_name = 'siteview/shop.html'
+
+
+class AllShopView(ListView):
+    context_object_name = 'objects'
+    queryset =Shop.objects.all()
+    template_name = 'product/allshop.html'
+class OneShopView(ListView):
+    context_object_name = 'product'
+    paginate_by=9
+    def get_queryset(self):
+        queryset= ShopProduct.objects.filter(shop__id=self.kwargs.get('id'))
+        return queryset
+    def get_context_data(self):
+        context = super().get_context_data()
+        context['shop'] = Shop.objects.get(id=self.kwargs.get('id'))
+        return context
+    template_name = 'product/oneshop.html'    
 
 
 
@@ -162,7 +180,7 @@ def like_product(request,id):
     product = ShopProduct.objects.get(id=id)
     Like.objects.get_or_create(product=product,user=user)
 
-    return redirect('shopview-url') 
+    return redirect('#') 
 
 class DeleteShopProduct(DeleteView):
     model = ShopProduct

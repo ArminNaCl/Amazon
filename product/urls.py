@@ -8,6 +8,8 @@ from .views import (
     WishListView,
     DeleteLikeView,
     AddOfferView,
+    OneShopView,
+    AllShopView,
 
 
     updateShopProductView,
@@ -18,9 +20,12 @@ from .views import (
 
 urlpatterns = [
     path('shop/',ShopView.as_view(),name='shopview-url'),
-    path('shop/<int:id>/',CategoryView.as_view(),name='categoryview-url'),
+    path('shops/',AllShopView.as_view(),name='allshopview-url'),
+    path('shops/<int:id>/',OneShopView.as_view(),name='oneshopview-url'),
+    path('category/<int:id>/',CategoryView.as_view(),name='categoryview-url'),
     path('product/<int:pk>/',ProductView.as_view(),name='productview-url'),
     path('brand/<int:id>/',BrandView.as_view(),name='brandview-url'),
+    
 
     path('product/<int:id>/offer/',AddOfferView.as_view(),name='addoffer-url'),
 

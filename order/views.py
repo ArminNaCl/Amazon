@@ -3,11 +3,13 @@ from django.shortcuts import get_object_or_404
 from product.models import ShopProduct
 from .models import Basket ,BasketItem ,Order,OrderItem
 from django.views.generic import ListView
+from django.contrib.auth.decorators import login_required
+
 
 
 # Create your views here.
 
-
+@login_required
 def add_to_cart(request,id):
     product = get_object_or_404(ShopProduct,id=id)
     basket = Basket.objects.get(user=request.user)

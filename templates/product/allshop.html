@@ -1,0 +1,9 @@
+
+
+{% for shop in objects %}
+
+<a href="{% url 'oneshopview-url' shop.id %}">{{shop.name}}</a>
+<br>
+
+
+{% endfor %}

@@ -44,7 +44,7 @@
                     <ul class="nav navbar-nav ml-auto" data-in="fadeInDown" data-out="fadeOutUp">
                         <li class="nav-item active"><a class="nav-link" href="{% url 'homeview-url' %}">Home</a></li>
                         <li class="nav-item"><a class="nav-link" href="{% url 'shopview-url' %}">Shop</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{% url 'profile-url' %}l">Profile</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'profile-url' %}">Profile</a></li>
                         <li class="nav-item"><a class="nav-link" href="{% url 'wishlistview-url'%}">WishList</a></li>
                     </ul>
                 </div>
@@ -54,10 +54,13 @@
                 <div class="attr-nav">
                     <ul>
                         <li class="search"><a href="{% url 'shopview-url' %}"><i class="fa fa-search"></i></a></li>
+                        {% if user.is_authenticated %}
                         <li class="side-menu"><a href="{% url 'cartview-url' %}">
 						<i class="fa fa-shopping-bag"></i>
                             <span class="badge">{{request.user.baskets.basket_item.all.count}}</span>
-					</a></li>
+					        </a>
+                        </li>
+                        {% endif %}
                     </ul>
                 </div>
                 <!-- End Atribute Navigation -->

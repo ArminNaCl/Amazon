@@ -8,6 +8,8 @@ from order.models import Basket
 from django.contrib.auth.decorators import login_required
 from .forms import UserRegistrationForm ,UserLoginForm,UserUpdateForm,ShopUpdateForm,AddressCreateForm
 from .models import Shop,Address
+from django.urls import reverse_lazy
+
 
 
 
@@ -30,7 +32,7 @@ class RegisteritionView(CreateView):
 class LoginView(Login):
     template_name = 'account/login.html'
     form_class = UserLoginForm
-    success_url='profile/update/'
+    success_url=reverse_lazy('profile-url')
 
 class LogoutView(Logout):
     next_page = '/'
@@ -38,7 +40,7 @@ class LogoutView(Logout):
 
 class CreateShopView(CreateView):
     form_class = Shop
-    success_url= 'shopview-url'
+    success_url= reverse_lazy('shopview-url')
     template_name= 'account/create_shop.html'
     form_class= ShopUpdateForm
     def form_valid(self,form):
@@ -80,7 +82,7 @@ def updateShop(request,id):
 
 class DeleteShopView(DeleteView):
     model=Shop
-    success_url = 'profile/update'
+    success_url = reverse_lazy('profile-url')
     template_name='product/shopproduct_confirm_delete.html'
     def get_object(self, queryset=None):
         return Shop.objects.get(id=self.kwargs.get("id"))
@@ -90,7 +92,7 @@ class DeleteShopView(DeleteView):
 class EditAddressView(UpdateView):
     model = Address
     fields=['city','street','allay','zip_code']
-    success_url = 'profile/update'
+    success_url = reverse_lazy('profile-url')
     template_name = 'account/update_address.html'
     def get_object(self, queryset=None):
         return Address.objects.get(id=self.kwargs.get("id"))
@@ -99,7 +101,7 @@ class CreateAddressView(CreateView):
     model = Address
     fields=['city','street','allay','zip_code']
     form = AddressCreateForm
-    success_url = 'profile/update'
+    success_url = reverse_lazy('profile-url')
     template_name = 'account/add_address.html'
     def form_valid(self,form):
         add = form.save(commit=False)
@@ -109,7 +111,7 @@ class CreateAddressView(CreateView):
 
 class DeleteAddressView(DeleteView):
     model=Address
-    success_url = 'profile/update'
+    success_url = reverse_lazy('profile-url')
     template_name='product/shopproduct_confirm_delete.html'
     def get_object(self, queryset=None):
         return Address.objects.get(id=self.kwargs.get("id"))
